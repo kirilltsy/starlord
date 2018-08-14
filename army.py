@@ -19,3 +19,9 @@ class Army(object):
 		for i in self.listofships:
 			listofdmg += i.givedmg()
 		return listofdmg
+
+	def dead(self):
+		if len(self.listofships) == 0:
+			return True
+		return False
+

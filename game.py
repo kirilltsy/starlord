@@ -1,13 +1,11 @@
 import random
 from army import Army
 from ship import Ship
+from planet import Planet
 import numpy
-
-TICKPERDAY = 100.
-DISTPERDAY = 10.
-DISTPERTICK = DISTPERDAY/TICKPERDAY
-MINDIST = DISTPERDAY/3
-
+import name
+from config import *
+from shipgroup import Shipgroup
 
 
 class Game(object):
@@ -21,9 +19,14 @@ class Game(object):
 
 	def startgame(self,dictofplayers,numberofplanets):
 		self.players = dictofplayers
-		self.planets = self.genplanets(numberofplanets)
+		cordplanets = self.cordplanets(numberofplanets)
+		nameplanets = name.manynames(len(cordplanets))
+		for i in range(len(cordplanets)):
+			self.planets.append(Planet(None,cordplanets[i],nameplanets[i]))
 
-	def genplanets(self,numberofplanets):
+
+
+	def cordplanets(self,numberofplanets):
 		width = (numpy.sqrt(numberofplanets)*DISTPERDAY)/2
 		listofcord = numpy.random.uniform(-width, width, size=(numberofplanets,2))
 		circle = [a for a in listofcord if numpy.linalg.norm(a)<width]
@@ -38,11 +41,4 @@ class Game(object):
 			i += 1
 		return circle
 
-
-
-	def battle(pl1,army1,pl2,army2):
-		while len(army2)>0:
-			army2.takedmg(army1.givedmg())
-			(pl1,army1,pl2,army2) = (pl2,army2,pl1,army1)
-		return (pl1, army1)
 
